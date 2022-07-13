@@ -1,15 +1,11 @@
 import React from "react";
 
-const Bookmark = ({ user, ...rest }) => {
+const BookMark = ({ status, ...rest }) => {
 	return (
-		<button onClick={() => rest.onToggleBookmark(user._id)}>
-			{user.bookmark === false ? (
-				<i className="bi bi-bookmark"></i>
-			) : (
-				<i className="bi bi-bookmark-fill"></i>
-			)}
+		<button {...rest}>
+			<i className={"bi bi-bookmark" + (status ? "-heart-fill" : "")}></i>
 		</button>
 	);
 };
 
-export default Bookmark;
+export default BookMark;

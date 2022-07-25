@@ -17,6 +17,7 @@ function App() {
                 return user;
             })
         );
+        console.log(id);
     };
     return (
         <div>

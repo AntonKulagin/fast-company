@@ -1,27 +1,18 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { paginate } from "../utils/paginate";
 import Pagination from "./pagination";
 import User from "./user";
-import PropTypes from "prop-types";
-
-const Users = ({ users, ...rest }) => {
-    const count = users.length;
-    const pageSize = 4;
+const Users = ({ users: allUsers, ...rest }) => {
     const [currentPage, setCurrentPage] = useState(1);
+    const count = allUsers.length;
+    const pageSize = 4;
+
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
+        console.log("page: ", pageIndex);
     };
-    const handlePrevNextPage = (prevNext, length) => {
-        if (currentPage > 1 && prevNext === "prev") {
-            setCurrentPage(currentPage - 1);
-        }
-        if (currentPage < length && prevNext === "next") {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
-    const userCrop = paginate(users, currentPage, pageSize);
-
+    const usersCrop = paginate(allUsers, currentPage, pageSize);
     return (
         <>
             {count > 0 && (
@@ -38,8 +29,8 @@ const Users = ({ users, ...rest }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {userCrop.map((user) => (
-                            <User key={user._id} {...rest} {...user} />
+                        {usersCrop.map((user) => (
+                            <User {...rest} {...user} key={user._id} />
                         ))}
                     </tbody>
                 </table>
@@ -47,15 +38,14 @@ const Users = ({ users, ...rest }) => {
             <Pagination
                 itemsCount={count}
                 pageSize={pageSize}
-                onChangePage={handlePageChange}
-                onPrevNextPage={handlePrevNextPage}
                 currentPage={currentPage}
+                onPageChange={handlePageChange}
             />
         </>
     );
 };
 Users.propTypes = {
-    users: PropTypes.array.isRequired
+    users: PropTypes.array
 };
 
 export default Users;

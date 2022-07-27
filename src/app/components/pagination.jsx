@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
 const Pagination = ({ itemsCount, pageSize, onPageChange, currentPage }) => {
     const pagesCount = Math.ceil(itemsCount / pageSize);
+    useEffect(() => {
+        if (currentPage > pagesCount) {
+            onPageChange(pagesCount);
+        }
+    }, [pagesCount]);
+
     if (pagesCount === 1) return null;
     const pages = _.range(1, pagesCount + 1);
 

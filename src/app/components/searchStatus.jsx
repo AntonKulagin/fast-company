@@ -11,7 +11,7 @@ const SearchStatus = ({ length }) => {
         return "человек тусанет";
     };
     return (
-        <h2>
+        <h2 className="users__status">
             <span
                 className={"badge " + (length > 0 ? "bg-primary" : "bg-danger")}
             >

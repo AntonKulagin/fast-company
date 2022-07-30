@@ -32,11 +32,7 @@ const Users = ({ users: allUsers, ...rest }) => {
     };
 
     const filteredUsers = selectedProf
-        ? allUsers.filter(
-              (user) =>
-                  JSON.stringify(user.profession) ===
-                  JSON.stringify(selectedProf)
-          )
+        ? allUsers.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
         : allUsers;
 
     const count = filteredUsers.length;
@@ -57,10 +53,7 @@ const Users = ({ users: allUsers, ...rest }) => {
                             items={professions}
                             onItemSelect={handleProfessionSelect}
                         />
-                        <button
-                            className="btn btn-secondary m-2"
-                            onClick={clearFilter}
-                        >
+                        <button className="btn btn-secondary m-2" onClick={clearFilter}>
                             Очистить
                         </button>
                     </div>

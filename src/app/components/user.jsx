@@ -2,17 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Quality from "./quality";
 import BookMark from "./bookmark";
-const User = ({
-    _id,
-    name,
-    qualities,
-    profession,
-    completedMeetings,
-    rate,
-    onDelete,
-    bookmark,
-    onToggleBookMark
-}) => {
+const User = ({ _id, name, qualities, profession, completedMeetings, rate, onDelete, bookmark, onToggleBookMark }) => {
     return (
         <tr key={_id}>
             <td>{name}</td>
@@ -25,16 +15,10 @@ const User = ({
             <td>{completedMeetings}</td>
             <td>{rate} /5</td>
             <td>
-                <BookMark
-                    status={bookmark}
-                    onClick={() => onToggleBookMark(_id)}
-                />
+                <BookMark status={bookmark} onClick={() => onToggleBookMark(_id)} />
             </td>
             <td>
-                <button
-                    onClick={() => onDelete(_id)}
-                    className="btn btn-danger"
-                >
+                <button onClick={() => onDelete(_id)} className="btn btn-danger">
                     delete
                 </button>
             </td>

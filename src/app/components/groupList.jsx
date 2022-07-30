@@ -1,13 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const GroupList = ({
-    items,
-    valueProperty,
-    contentProperty,
-    selectedItem,
-    onItemSelect
-}) => {
+const GroupList = ({ items, valueProperty, contentProperty, selectedItem, onItemSelect }) => {
     return (
         <ul className="list-group">
             {Object.keys(items).map((item) => (
@@ -15,10 +9,7 @@ const GroupList = ({
                     key={items[item][valueProperty]}
                     className={
                         "list-group-item" +
-                        (JSON.stringify(selectedItem) ===
-                        JSON.stringify(items[item])
-                            ? " active"
-                            : "")
+                        (JSON.stringify(selectedItem) === JSON.stringify(items[item]) ? " active" : "")
                     }
                     role="button"
                     onClick={() => onItemSelect(items[item])}

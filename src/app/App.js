@@ -24,13 +24,7 @@ function App() {
     };
     return (
         <div className="users">
-            {users && (
-                <Users
-                    onDelete={handleDelete}
-                    onToggleBookMark={handleToggleBookMark}
-                    users={users}
-                />
-            )}
+            {users && <Users onDelete={handleDelete} onToggleBookMark={handleToggleBookMark} users={users} />}
         </div>
     );
 }

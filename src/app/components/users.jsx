@@ -1,3 +1,5 @@
+/* eslint multiline-ternary: "off" */
+
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { paginate } from "../utils/paginate";
@@ -29,14 +31,13 @@ const Users = ({ users: allUsers, ...rest }) => {
         setCurrentPage(pageIndex);
     };
 
-    let filteredUsers = allUsers;
-
-    if (selectedProf) {
-        filteredUsers = allUsers.filter(
-            (user) =>
-                JSON.stringify(user.profession) === JSON.stringify(selectedProf)
-        );
-    }
+    const filteredUsers = selectedProf
+        ? allUsers.filter(
+              (user) =>
+                  JSON.stringify(user.profession) ===
+                  JSON.stringify(selectedProf)
+          )
+        : allUsers;
 
     const count = filteredUsers.length;
     const usersCrop = paginate(filteredUsers, currentPage, pageSize);

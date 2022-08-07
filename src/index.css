@@ -10,7 +10,28 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+.bg-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.bg-image img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    opacity: 0.1;
+    filter: grayscale(100%);
+}
+
 .users {
+    position: relative;
+    z-index: 50;
     display: flex;
     flex-direction: column;
 }
@@ -31,7 +52,97 @@ code {
     align-items: center;
 }
 
-.list-group-item:hover{
-	background-color: rgb(240, 240, 240);
-	transition: all 0.2s ease 0s;
+.list-group-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.list-group-item::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    transform: translate(-60px) skew(-30deg);
+}
+
+.list-group-item:hover {
+    background-color: rgb(221, 221, 221);
+    transition: all 0.3s ease 0s;
+}
+
+.list-group-item:hover::before {
+    animation: highlight 0.6s;
+}
+
+@keyframes highlight {
+    0% {
+        transform: translate(-60px) skew(-30deg);
+    }
+    100% {
+        transform: translate(130px) skew(-30deg);
+    }
+}
+
+.table-header__item {
+    display: flex;
+}
+
+.table-header__content {
+    position: relative;
+}
+
+.table-header__content::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: 0;
+    left: 50%;
+    background-color: rgb(43, 0, 143);
+    transition: all 0.3s ease 0s;
+}
+
+.table-header__content:hover:before {
+    width: 100%;
+    left: 0;
+}
+
+.table-header__arrow {
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    margin-left: 10px;
+    transition: all 0.4s ease 0s;
+}
+
+.table-header__arrow_asc {
+    border-bottom: 9px solid rgb(26, 0, 121);
+    transform: translateY(8px);
+}
+
+.table-header__arrow_desc {
+    border-top: 9px solid rgb(26, 0, 121);
+    transform: translateY(10px);
+}
+
+.loading {
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading__item {
+    flex: 0 0 200px;
+    font-weight: 600;
+    font-size: 30px;
 }

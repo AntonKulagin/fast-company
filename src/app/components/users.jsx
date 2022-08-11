@@ -10,6 +10,9 @@ import SearchStatus from "./searchStatus";
 import UserTable from "./userTable";
 import _ from "lodash";
 import Loading from "./loading";
+import { useParams } from "react-router-dom";
+import User from "./user";
+
 const Users = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
@@ -58,6 +61,8 @@ const Users = () => {
         setSortBy(item);
     };
 
+    const { userId } = useParams();
+
     if (users) {
         const filteredUsers = selectedProf
             ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
@@ -72,40 +77,46 @@ const Users = () => {
         };
 
         return (
-            <div className="users">
-                <SearchStatus length={count} />
-                <div className="users__content">
-                    {professions && (
-                        <div className="users__professions">
-                            <GroupList
-                                selectedItem={selectedProf}
-                                items={professions}
-                                onItemSelect={handleProfessionSelect}
-                            />
-                            <button className="btn btn-secondary m-2" onClick={clearFilter}>
-                                Очистить
-                            </button>
+            <>
+                {userId ? (
+                    <User userId={userId} />
+                ) : (
+                    <div className="users">
+                        <SearchStatus length={count} />
+                        <div className="users__content">
+                            {professions && (
+                                <div className="users__professions">
+                                    <GroupList
+                                        selectedItem={selectedProf}
+                                        items={professions}
+                                        onItemSelect={handleProfessionSelect}
+                                    />
+                                    <button className="btn btn-secondary m-2" onClick={clearFilter}>
+                                        Очистить
+                                    </button>
+                                </div>
+                            )}
+                            <div className="users__table">
+                                {count > 0 && (
+                                    <UserTable
+                                        users={usersCrop}
+                                        onSort={handleSort}
+                                        selectedSort={sortBy}
+                                        onDelete={handleDelete}
+                                        onToggleBookMark={handleToggleBookMark}
+                                    />
+                                )}
+                                <Pagination
+                                    itemsCount={count}
+                                    pageSize={pageSize}
+                                    currentPage={currentPage}
+                                    onPageChange={handlePageChange}
+                                />
+                            </div>
                         </div>
-                    )}
-                    <div className="users__table">
-                        {count > 0 && (
-                            <UserTable
-                                users={usersCrop}
-                                onSort={handleSort}
-                                selectedSort={sortBy}
-                                onDelete={handleDelete}
-                                onToggleBookMark={handleToggleBookMark}
-                            />
-                        )}
-                        <Pagination
-                            itemsCount={count}
-                            pageSize={pageSize}
-                            currentPage={currentPage}
-                            onPageChange={handlePageChange}
-                        />
                     </div>
-                </div>
-            </div>
+                )}
+            </>
         );
     }
     return <Loading />;

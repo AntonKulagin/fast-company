@@ -10,8 +10,14 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+.wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
 .bg-image {
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
     top: 0;
@@ -31,7 +37,7 @@ code {
 
 .users {
     position: relative;
-    z-index: 50;
+    z-index: 20;
     display: flex;
     flex-direction: column;
 }
@@ -145,4 +151,14 @@ code {
     flex: 0 0 200px;
     font-weight: 600;
     font-size: 30px;
+}
+
+.nav {
+    position: relative;
+    z-index: 15;
+}
+
+.user-block {
+    position: relative;
+    z-index: 20;
 }

@@ -3,17 +3,16 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { paginate } from "../utils/paginate";
-import Pagination from "./pagination";
-import GroupList from "./groupList";
+import Pagination from "../components/pagination";
+import GroupList from "../components/groupList";
 import api from "../api";
-import SearchStatus from "./searchStatus";
-import UserTable from "./userTable";
+import SearchStatus from "../components/searchStatus";
+import UserTable from "../components/userTable";
 import _ from "lodash";
-import Loading from "./loading";
-import { useParams } from "react-router-dom";
-import User from "./user";
+import Loading from "../components/loading";
+import { motion } from "framer-motion";
 
-const Users = () => {
+const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
@@ -61,8 +60,6 @@ const Users = () => {
         setSortBy(item);
     };
 
-    const { userId } = useParams();
-
     if (users) {
         const filteredUsers = selectedProf
             ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
@@ -78,44 +75,45 @@ const Users = () => {
 
         return (
             <>
-                {userId ? (
-                    <User userId={userId} />
-                ) : (
-                    <div className="users">
-                        <SearchStatus length={count} />
-                        <div className="users__content">
-                            {professions && (
-                                <div className="users__professions">
-                                    <GroupList
-                                        selectedItem={selectedProf}
-                                        items={professions}
-                                        onItemSelect={handleProfessionSelect}
-                                    />
-                                    <button className="btn btn-secondary m-2" onClick={clearFilter}>
-                                        Очистить
-                                    </button>
-                                </div>
-                            )}
-                            <div className="users__table">
-                                {count > 0 && (
-                                    <UserTable
-                                        users={usersCrop}
-                                        onSort={handleSort}
-                                        selectedSort={sortBy}
-                                        onDelete={handleDelete}
-                                        onToggleBookMark={handleToggleBookMark}
-                                    />
-                                )}
-                                <Pagination
-                                    itemsCount={count}
-                                    pageSize={pageSize}
-                                    currentPage={currentPage}
-                                    onPageChange={handlePageChange}
+                <div className="users">
+                    <SearchStatus length={count} />
+                    <div className="users__content">
+                        {professions && (
+                            <motion.div
+                                className="users__professions"
+                                initial={{ x: -50, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                transition={{ duration: 1 }}
+                            >
+                                <GroupList
+                                    selectedItem={selectedProf}
+                                    items={professions}
+                                    onItemSelect={handleProfessionSelect}
                                 />
-                            </div>
+                                <button className="btn btn-secondary m-2" onClick={clearFilter}>
+                                    Очистить
+                                </button>
+                            </motion.div>
+                        )}
+                        <div className="users__table">
+                            {count > 0 && (
+                                <UserTable
+                                    users={usersCrop}
+                                    onSort={handleSort}
+                                    selectedSort={sortBy}
+                                    onDelete={handleDelete}
+                                    onToggleBookMark={handleToggleBookMark}
+                                />
+                            )}
+                            <Pagination
+                                itemsCount={count}
+                                pageSize={pageSize}
+                                currentPage={currentPage}
+                                onPageChange={handlePageChange}
+                            />
                         </div>
                     </div>
-                )}
+                </div>
             </>
         );
     }
@@ -125,8 +123,8 @@ GroupList.defaultProps = {
     valueProperty: "_id",
     contentProperty: "name"
 };
-Users.propTypes = {
+UsersList.propTypes = {
     users: PropTypes.array
 };
 
-export default Users;
+export default UsersList;

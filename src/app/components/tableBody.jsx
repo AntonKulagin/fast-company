@@ -1,14 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 import _ from "lodash";
-import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const TableBody = ({ data, columns }) => {
-    const renderContent = (item, column) => {
-        if (column === "name") {
-            return <Link to={`/users/${item._id}`}>{item[column]}</Link>;
-        }
+    const trVariants = {
+        visible: (i) => ({
+            opacity: 1,
+            transition: {
+                delay: i * 0.1
+            }
+        }),
+        hidden: { opacity: 0 }
+    };
 
+    const renderContent = (item, column) => {
         if (columns[column].componenet) {
             const component = columns[column].componenet;
             if (typeof component === "function") {
@@ -21,12 +27,12 @@ const TableBody = ({ data, columns }) => {
     };
     return (
         <tbody>
-            {data.map((item) => (
-                <tr key={item._id}>
+            {data.map((item, i) => (
+                <motion.tr key={item._id} variants={trVariants} initial="hidden" animate="visible" custom={i}>
                     {Object.keys(columns).map((column) => (
                         <td key={column}>{renderContent(item, column)}</td>
                     ))}
-                </tr>
+                </motion.tr>
             ))}
         </tbody>
     );

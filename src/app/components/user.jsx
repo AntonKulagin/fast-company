@@ -4,6 +4,7 @@ import api from "../api";
 import Loading from "./loading";
 import QualitiesList from "./qualitiesList";
 import { useHistory } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const User = ({ userId }) => {
     const [user, setUser] = useState();
@@ -19,7 +20,12 @@ const User = ({ userId }) => {
 
     if (user) {
         return (
-            <div className="user-block">
+            <motion.div
+                className="user-block"
+                initial={{ x: 50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 1 }}
+            >
                 <h1 className="user-block__title">{user.name}</h1>
                 <h2 className="user-block__profession">Профессия: {user.profession.name}</h2>
                 <div className="user-block__qualities">
@@ -35,7 +41,7 @@ const User = ({ userId }) => {
                 >
                     Все пользователи
                 </button>
-            </div>
+            </motion.div>
         );
     }
     return <Loading />;

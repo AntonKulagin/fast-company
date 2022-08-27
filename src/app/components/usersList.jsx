@@ -11,12 +11,14 @@ import UserTable from "../components/userTable";
 import _ from "lodash";
 import Loading from "../components/loading";
 import { motion } from "framer-motion";
+import TextField from "./textField";
 
 const UsersList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+    const [searchUsersByName, setSearchUsersByName] = useState("");
 
     const pageSize = 8;
 
@@ -49,6 +51,7 @@ const UsersList = () => {
     }, [selectedProf]);
 
     const handleProfessionSelect = (item) => {
+        setSearchUsersByName("");
         setSelectedProf(item);
     };
 
@@ -59,14 +62,24 @@ const UsersList = () => {
     const handleSort = (item) => {
         setSortBy(item);
     };
+    const handleSearchUsers = (e) => {
+        setSelectedProf();
+        setSearchUsersByName(e.target.value);
+    };
 
     if (users) {
+        const searchedUsersByName = searchUsersByName
+            ? users.filter((user) => user.name.toLowerCase().includes(searchUsersByName.toLowerCase()))
+            : users;
+
         const filteredUsers = selectedProf
             ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
             : users;
 
-        const count = filteredUsers.length;
-        const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
+        const usersFilterList = searchUsersByName ? searchedUsersByName : filteredUsers;
+
+        const count = usersFilterList.length;
+        const sortedUsers = _.orderBy(usersFilterList, [sortBy.path], [sortBy.order]);
         const usersCrop = paginate(sortedUsers, currentPage, pageSize);
 
         const clearFilter = () => {
@@ -96,6 +109,13 @@ const UsersList = () => {
                             </motion.div>
                         )}
                         <div className="users__table">
+                            <div className="users-search-field">
+                                <TextField
+                                    onChange={handleSearchUsers}
+                                    value={searchUsersByName}
+                                    placeholder="Search ..."
+                                />
+                            </div>
                             {count > 0 && (
                                 <UserTable
                                     users={usersCrop}

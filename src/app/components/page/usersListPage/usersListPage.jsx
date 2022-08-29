@@ -2,18 +2,18 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { paginate } from "../utils/paginate";
-import Pagination from "../components/pagination";
-import GroupList from "../components/groupList";
-import api from "../api";
-import SearchStatus from "../components/searchStatus";
-import UserTable from "../components/userTable";
+import { paginate } from "../../../utils/paginate";
+import Pagination from "../../common/pagination";
+import GroupList from "../../common/groupList";
+import api from "../../../api";
+import SearchStatus from "../../ui/searchStatus";
+import UserTable from "../../ui/userTable";
 import _ from "lodash";
-import Loading from "../components/loading";
+import Loading from "../../loading";
 import { motion } from "framer-motion";
-import TextField from "./textField";
+import TextField from "../../common/form/textField";
 
-const UsersList = () => {
+const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
@@ -62,9 +62,9 @@ const UsersList = () => {
     const handleSort = (item) => {
         setSortBy(item);
     };
-    const handleSearchUsers = (e) => {
+    const handleSearchUsers = (target) => {
         setSelectedProf();
-        setSearchUsersByName(e.target.value);
+        setSearchUsersByName(target.value);
     };
 
     if (users) {
@@ -98,11 +98,7 @@ const UsersList = () => {
                                 animate={{ x: 0, opacity: 1 }}
                                 transition={{ duration: 1 }}
                             >
-                                <GroupList
-                                    selectedItem={selectedProf}
-                                    items={professions}
-                                    onItemSelect={handleProfessionSelect}
-                                />
+                                <GroupList selectedItem={selectedProf} items={professions} onItemSelect={handleProfessionSelect} />
                                 <button className="btn btn-secondary m-2" onClick={clearFilter}>
                                     Очистить
                                 </button>
@@ -114,6 +110,7 @@ const UsersList = () => {
                                     onChange={handleSearchUsers}
                                     value={searchUsersByName}
                                     placeholder="Search ..."
+                                    name="search users"
                                 />
                             </div>
                             {count > 0 && (
@@ -125,12 +122,7 @@ const UsersList = () => {
                                     onToggleBookMark={handleToggleBookMark}
                                 />
                             )}
-                            <Pagination
-                                itemsCount={count}
-                                pageSize={pageSize}
-                                currentPage={currentPage}
-                                onPageChange={handlePageChange}
-                            />
+                            <Pagination itemsCount={count} pageSize={pageSize} currentPage={currentPage} onPageChange={handlePageChange} />
                         </div>
                     </div>
                 </div>
@@ -143,8 +135,8 @@ GroupList.defaultProps = {
     valueProperty: "_id",
     contentProperty: "name"
 };
-UsersList.propTypes = {
+UsersListPage.propTypes = {
     users: PropTypes.array
 };
 
-export default UsersList;
+export default UsersListPage;

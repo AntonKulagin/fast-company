@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import btnIcon from "../../img/button-icon.svg";
+import btnIcon from "../../../../img/button-icon.svg";
 
 const TextField = ({ label, type, name, value, placeholder, onChange, error }) => {
     const [showPassword, setShowPassword] = useState(false);
@@ -9,6 +9,10 @@ const TextField = ({ label, type, name, value, placeholder, onChange, error }) =
     };
     const getClassInputButton = () => {
         return "input-button " + (showPassword ? "input-button__hidden" : "");
+    };
+
+    const handleChange = ({ target }) => {
+        onChange({ name: target.name, value: target.value });
     };
     return (
         <div className="login-form">
@@ -23,7 +27,7 @@ const TextField = ({ label, type, name, value, placeholder, onChange, error }) =
                     name={name}
                     value={value}
                     placeholder={placeholder}
-                    onChange={onChange}
+                    onChange={handleChange}
                 />
                 {type === "password" && (
                     <button type="button" className={getClassInputButton()} onClick={toggleShowPassword}>

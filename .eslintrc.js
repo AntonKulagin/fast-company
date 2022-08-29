@@ -14,8 +14,9 @@ module.exports = {
     plugins: ["react"],
     rules: {
         semi: [2, "always"],
-        indent: ["error", 4, { flatTernaryExpressions: true }],
+        indent: [0, 4],
         "space-before-function-paren": ["error", { anonymous: "always", named: "never" }],
+        "multiline-ternary": ["off"],
         quotes: [
             "error",
             "double",

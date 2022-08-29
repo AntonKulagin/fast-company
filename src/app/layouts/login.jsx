@@ -1,74 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import TextField from "../components/textField";
-import { validator } from "../utils/validator";
+import LoginForm from "../components/ui/loginForm";
+import { useParams } from "react-router-dom";
+import RegisterForm from "../components/ui/registerForm";
 
 const Login = () => {
-    const [data, setData] = useState({ email: "", password: "" });
-    const [errors, setErrors] = useState({});
-    const handleChange = ({ target }) => {
-        setData((prev) => ({ ...prev, [target.name]: target.value }));
+    const { type } = useParams();
+    const [formType, setFormType] = useState(type === "register" ? type : "login");
+    const toggleFormType = () => {
+        setFormType((prev) => (prev === "register" ? "login" : "register"));
     };
 
-    const validatorConfig = {
-        email: {
-            isRequired: { messege: "Электронная почта обязательна для заполнения" },
-            isEmail: { messege: "Email введен некорректно" }
-        },
-        password: {
-            isRequired: { messege: "Пароль обязателен для заполнения" },
-            isCapitalSymbol: { messege: "Пароль должен содержать хотя бы одну заглавную букву" },
-            isContainDigit: { messege: "Пароль должен содержать хотябы одну цифру" },
-            min: { messege: "Пароль должен состоять минимум из 8 символов", value: 8 }
-        }
-    };
-
-    useEffect(() => {
-        validate();
-    }, [data]);
-
-    const validate = () => {
-        const errors = validator(data, validatorConfig);
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-    const isValid = Object.keys(errors).length === 0;
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const isValid = validate();
-        if (!isValid) return;
-        console.log(data);
-    };
-
-    const getClassButton = () => {
-        return "login-button " + (isValid && "login-button__active");
-    };
     return (
         <div className="login-block">
-            <motion.h1 initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 1.5 }}>
-                Login
-            </motion.h1>
-            <form className="login" onSubmit={handleSubmit}>
-                <TextField
-                    label="Электронная почта"
-                    name="email"
-                    value={data.email}
-                    onChange={handleChange}
-                    error={errors.email}
-                />
-                <TextField
-                    label="Пароль"
-                    type="password"
-                    name="password"
-                    value={data.password}
-                    onChange={handleChange}
-                    error={errors.password}
-                />
-                <button disabled={!isValid} className={getClassButton()}>
-                    Отправить
-                </button>
-            </form>
+            {formType === "register" ? (
+                <div className="register-area">
+                    <motion.h1
+                        initial={{ x: 50, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ duration: 1.5 }}
+                    >
+                        Register
+                    </motion.h1>
+                    <RegisterForm />
+                    <p>
+                        Do you have an account?
+                        <a role="button" onClick={toggleFormType}>
+                            Sign In
+                        </a>
+                    </p>
+                </div>
+            ) : (
+                <div className="login-area">
+                    <motion.h1
+                        initial={{ x: 50, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ duration: 1.5 }}
+                    >
+                        Login
+                    </motion.h1>
+                    <LoginForm />
+                    <p>
+                        Do not you have an account?
+                        <a role="button" onClick={toggleFormType}>
+                            Sign Up
+                        </a>
+                    </p>
+                </div>
+            )}
         </div>
     );
 };

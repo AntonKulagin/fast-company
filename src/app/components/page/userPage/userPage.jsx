@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import api from "../api";
-import Loading from "./loading";
-import QualitiesList from "./qualitiesList";
+import api from "../../../api";
+import Loading from "../../loading";
+import Qualities from "../../ui/qualities";
 import { useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 
-const User = ({ userId }) => {
+const UserPage = ({ userId }) => {
     const [user, setUser] = useState();
     const history = useHistory();
 
@@ -15,21 +15,16 @@ const User = ({ userId }) => {
     }, []);
 
     const handleAllUsers = () => {
-        history.push("/users");
+        history.push(`/users/${userId}/edit`);
     };
 
     if (user) {
         return (
-            <motion.div
-                className="user-block"
-                initial={{ x: 50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 1 }}
-            >
+            <motion.div className="user-block" initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 1 }}>
                 <h1 className="user-block__title">{user.name}</h1>
                 <h2 className="user-block__profession">Профессия: {user.profession.name}</h2>
                 <div className="user-block__qualities">
-                    <QualitiesList qualities={user.qualities} />
+                    <Qualities qualities={user.qualities} />
                 </div>
                 <div className="user-block__completed">completedMeetings: {user.completedMeetings}</div>
                 <h2 className="user-block__rate">Rate {user.rate}</h2>
@@ -39,15 +34,15 @@ const User = ({ userId }) => {
                         handleAllUsers();
                     }}
                 >
-                    Все пользователи
+                    Изменить
                 </button>
             </motion.div>
         );
     }
     return <Loading />;
 };
-User.propTypes = {
+UserPage.propTypes = {
     userId: PropTypes.string.isRequired
 };
 
-export default User;
+export default UserPage;

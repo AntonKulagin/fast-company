@@ -8,7 +8,14 @@ import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxField from "../common/form/checkBoxField";
 
 const RegisterForm = () => {
-    const [data, setData] = useState({ email: "", password: "", profession: "", sex: "male", qualities: [], licence: false });
+    const [data, setData] = useState({
+        email: "",
+        password: "",
+        profession: "",
+        sex: "male",
+        qualities: [],
+        licence: false
+    });
     const [errors, setErrors] = useState({});
     const [qualities, setQualities] = useState({});
     const [professions, setProfessions] = useState();
@@ -33,20 +40,20 @@ const RegisterForm = () => {
 
     const validatorConfig = {
         email: {
-            isRequired: { messege: "Электронная почта обязательна для заполнения" },
-            isEmail: { messege: "Email введен некорректно" }
+            isRequired: { message: "Электронная почта обязательна для заполнения" },
+            isEmail: { message: "Email введен некорректно" }
         },
         password: {
-            isRequired: { messege: "Пароль обязателен для заполнения" },
-            isCapitalSymbol: { messege: "Пароль должен содержать хотя бы одну заглавную букву" },
-            isContainDigit: { messege: "Пароль должен содержать хотябы одну цифру" },
-            min: { messege: "Пароль должен состоять минимум из 8 символов", value: 8 }
+            isRequired: { message: "Пароль обязателен для заполнения" },
+            isCapitalSymbol: { message: "Пароль должен содержать хотя бы одну заглавную букву" },
+            isContainDigit: { message: "Пароль должен содержать хотябы одну цифру" },
+            min: { message: "Пароль должен состоять минимум из 8 символов", value: 8 }
         },
         profession: {
-            isRequired: { messege: "Обязательно выберете Вашу профессию" }
+            isRequired: { message: "Обязательно выберете Вашу профессию" }
         },
         licence: {
-            isRequired: { messege: "Подтвердите ваше согласие лицензионного соглашения" }
+            isRequired: { message: "Подтвердите ваше согласие лицензионного соглашения" }
         }
     };
 
@@ -109,7 +116,13 @@ const RegisterForm = () => {
 
     return (
         <form className="login" onSubmit={handleSubmit}>
-            <TextField label="Электронная почта" name="email" value={data.email} onChange={handleChange} error={errors.email} />
+            <TextField
+                label="Электронная почта"
+                name="email"
+                value={data.email}
+                onChange={handleChange}
+                error={errors.email}
+            />
             <TextField
                 label="Пароль"
                 type="password"

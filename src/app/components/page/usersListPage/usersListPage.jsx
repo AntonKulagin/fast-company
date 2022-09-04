@@ -2,21 +2,23 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { paginate } from "../utils/paginate";
-import Pagination from "../components/pagination";
-import GroupList from "../components/groupList";
-import api from "../api";
-import SearchStatus from "../components/searchStatus";
-import UserTable from "../components/userTable";
+import { paginate } from "../../../utils/paginate";
+import Pagination from "../../common/pagination";
+import GroupList from "../../common/groupList";
+import api from "../../../api";
+import SearchStatus from "../../ui/searchStatus";
+import UserTable from "../../ui/userTable";
 import _ from "lodash";
-import Loading from "../components/loading";
+import Loading from "../../loading";
 import { motion } from "framer-motion";
+import TextField from "../../common/form/textField";
 
-const UsersList = () => {
+const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
+    const [searchUsersByName, setSearchUsersByName] = useState("");
 
     const pageSize = 8;
 
@@ -49,6 +51,7 @@ const UsersList = () => {
     }, [selectedProf]);
 
     const handleProfessionSelect = (item) => {
+        setSearchUsersByName("");
         setSelectedProf(item);
     };
 
@@ -59,14 +62,24 @@ const UsersList = () => {
     const handleSort = (item) => {
         setSortBy(item);
     };
+    const handleSearchUsers = (target) => {
+        setSelectedProf();
+        setSearchUsersByName(target.value);
+    };
 
     if (users) {
+        const searchedUsersByName = searchUsersByName
+            ? users.filter((user) => user.name.toLowerCase().includes(searchUsersByName.toLowerCase()))
+            : users;
+
         const filteredUsers = selectedProf
             ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
             : users;
 
-        const count = filteredUsers.length;
-        const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
+        const usersFilterList = searchUsersByName ? searchedUsersByName : filteredUsers;
+
+        const count = usersFilterList.length;
+        const sortedUsers = _.orderBy(usersFilterList, [sortBy.path], [sortBy.order]);
         const usersCrop = paginate(sortedUsers, currentPage, pageSize);
 
         const clearFilter = () => {
@@ -85,17 +98,21 @@ const UsersList = () => {
                                 animate={{ x: 0, opacity: 1 }}
                                 transition={{ duration: 1 }}
                             >
-                                <GroupList
-                                    selectedItem={selectedProf}
-                                    items={professions}
-                                    onItemSelect={handleProfessionSelect}
-                                />
+                                <GroupList selectedItem={selectedProf} items={professions} onItemSelect={handleProfessionSelect} />
                                 <button className="btn btn-secondary m-2" onClick={clearFilter}>
                                     Очистить
                                 </button>
                             </motion.div>
                         )}
                         <div className="users__table">
+                            <div className="users-search-field">
+                                <TextField
+                                    onChange={handleSearchUsers}
+                                    value={searchUsersByName}
+                                    placeholder="Search ..."
+                                    name="search users"
+                                />
+                            </div>
                             {count > 0 && (
                                 <UserTable
                                     users={usersCrop}
@@ -105,12 +122,7 @@ const UsersList = () => {
                                     onToggleBookMark={handleToggleBookMark}
                                 />
                             )}
-                            <Pagination
-                                itemsCount={count}
-                                pageSize={pageSize}
-                                currentPage={currentPage}
-                                onPageChange={handlePageChange}
-                            />
+                            <Pagination itemsCount={count} pageSize={pageSize} currentPage={currentPage} onPageChange={handlePageChange} />
                         </div>
                     </div>
                 </div>
@@ -123,8 +135,8 @@ GroupList.defaultProps = {
     valueProperty: "_id",
     contentProperty: "name"
 };
-UsersList.propTypes = {
+UsersListPage.propTypes = {
     users: PropTypes.array
 };
 
-export default UsersList;
+export default UsersListPage;

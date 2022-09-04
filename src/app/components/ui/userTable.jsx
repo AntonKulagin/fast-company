@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import BookMark from "./bookmark";
-import QualitiesList from "./qualitiesList";
-import Table from "./table";
+import BookMark from "../common/bookmark";
+import Qualities from "./qualities";
+import Table from "../common/table";
+
 import { Link } from "react-router-dom";
 
 const UserTable = ({ users, onSort, selectedSort, onToggleBookMark, onDelete, ...rest }) => {
@@ -10,7 +11,7 @@ const UserTable = ({ users, onSort, selectedSort, onToggleBookMark, onDelete, ..
         name: { path: "name", name: "Имя", componenet: (user) => <Link to={`/users/${user._id}`}>{user.name}</Link> },
         qualities: {
             name: "Качества",
-            componenet: (user) => <QualitiesList qualities={user.qualities} />
+            componenet: (user) => <Qualities qualities={user.qualities} />
         },
         profession: { path: "profession.name", name: "Профессия" },
         completedMeetings: { path: "completedMeetings", name: "Встретился, раз" },

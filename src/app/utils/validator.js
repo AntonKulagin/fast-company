@@ -1,6 +1,5 @@
 /* eslint indent: ["error", 4, { "SwitchCase": 1 }] */
 export function validator(data, config) {
-    console.log(config);
     const errors = {};
     function validate(validateMethod, data, config) {
         let statusValidate;

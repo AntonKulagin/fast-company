@@ -7,6 +7,7 @@ import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import Loading from "../../loading";
+import BackButton from "../../common/backButton";
 
 const EditUserPage = () => {
     const { userId } = useParams();
@@ -19,6 +20,7 @@ const EditUserPage = () => {
         sex: "male",
         qualities: []
     });
+
     const [professions, setProfession] = useState([]);
     const [qualities, setQualities] = useState([]);
     const [errors, setErrors] = useState({});
@@ -128,6 +130,7 @@ const EditUserPage = () => {
     const isValid = Object.keys(errors).length === 0;
     return (
         <div className="edit-page">
+            <BackButton />
             {!isLoading && Object.keys(professions).length > 0 ? (
                 <form onSubmit={handleSubmit}>
                     <TextField label="Имя" name="name" value={data.name} onChange={handleChange} error={errors.name} />

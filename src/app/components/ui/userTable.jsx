@@ -11,7 +11,7 @@ const UserTable = ({ users, onSort, selectedSort, onToggleBookMark, onDelete, ..
         name: { path: "name", name: "Имя", component: (user) => <Link to={`/users/${user._id}`}>{user.name}</Link> },
         qualities: {
             name: "Качества",
-            component: (user) => <Qualities qualities={user.qualities} />
+            component: (user) => <Qualities qualitiesId={user.qualities} />
         },
         profession: { name: "Профессия", component: (user) => <Profession id={user.profession} /> },
         completedMeetings: { path: "completedMeetings", name: "Встретился, раз" },

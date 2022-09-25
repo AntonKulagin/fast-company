@@ -12,6 +12,7 @@ import _ from "lodash";
 import Loading from "../../loading";
 import { motion } from "framer-motion";
 import TextField from "../../common/form/textField";
+import { useUser } from "../../../hooks/useUsers";
 
 const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -22,24 +23,21 @@ const UsersListPage = () => {
 
     const pageSize = 8;
 
-    const [users, setUsers] = useState();
-
-    useEffect(() => {
-        api.users.fetchAll().then((data) => setUsers(data));
-    }, []);
+    const { users } = useUser();
 
     const handleDelete = (userId) => {
-        setUsers(users.filter((user) => user._id !== userId));
+        //   setUsers(users.filter((user) => user._id !== userId));
+        console.log(userId);
     };
     const handleToggleBookMark = (id) => {
-        setUsers(
-            users.map((user) => {
-                if (user._id === id) {
-                    return { ...user, bookmark: !user.bookmark };
-                }
-                return user;
-            })
-        );
+        const newArray = users.map((user) => {
+            if (user._id === id) {
+                return { ...user, bookmark: !user.bookmark };
+            }
+            return user;
+        });
+        //   setUsers(newArray);
+        console.log(newArray);
     };
 
     useEffect(() => {
@@ -98,7 +96,11 @@ const UsersListPage = () => {
                                 animate={{ x: 0, opacity: 1 }}
                                 transition={{ duration: 1 }}
                             >
-                                <GroupList selectedItem={selectedProf} items={professions} onItemSelect={handleProfessionSelect} />
+                                <GroupList
+                                    selectedItem={selectedProf}
+                                    items={professions}
+                                    onItemSelect={handleProfessionSelect}
+                                />
                                 <button className="btn btn-secondary m-2" onClick={clearFilter}>
                                     Очистить
                                 </button>
@@ -122,7 +124,12 @@ const UsersListPage = () => {
                                     onToggleBookMark={handleToggleBookMark}
                                 />
                             )}
-                            <Pagination itemsCount={count} pageSize={pageSize} currentPage={currentPage} onPageChange={handlePageChange} />
+                            <Pagination
+                                itemsCount={count}
+                                pageSize={pageSize}
+                                currentPage={currentPage}
+                                onPageChange={handlePageChange}
+                            />
                         </div>
                     </div>
                 </div>

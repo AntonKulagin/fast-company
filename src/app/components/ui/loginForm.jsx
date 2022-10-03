@@ -12,14 +12,14 @@ const LoginForm = () => {
 
     const validatorConfig = {
         email: {
-            isRequired: { messege: "Электронная почта обязательна для заполнения" },
-            isEmail: { messege: "Email введен некорректно" }
+            isRequired: { message: "Электронная почта обязательна для заполнения" },
+            isEmail: { message: "Email введен некорректно" }
         },
         password: {
-            isRequired: { messege: "Пароль обязателен для заполнения" },
-            isCapitalSymbol: { messege: "Пароль должен содержать хотя бы одну заглавную букву" },
-            isContainDigit: { messege: "Пароль должен содержать хотябы одну цифру" },
-            min: { messege: "Пароль должен состоять минимум из 8 символов", value: 8 }
+            isRequired: { message: "Пароль обязателен для заполнения" },
+            isCapitalSymbol: { message: "Пароль должен содержать хотя бы одну заглавную букву" },
+            isContainDigit: { message: "Пароль должен содержать хотябы одну цифру" },
+            min: { message: "Пароль должен состоять минимум из 8 символов", value: 8 }
         }
     };
 
@@ -46,7 +46,13 @@ const LoginForm = () => {
     };
     return (
         <form className="login" onSubmit={handleSubmit}>
-            <TextField label="Электронная почта" name="email" value={data.email} onChange={handleChange} error={errors.email} />
+            <TextField
+                label="Электронная почта"
+                name="email"
+                value={data.email}
+                onChange={handleChange}
+                error={errors.email}
+            />
             <TextField
                 label="Пароль"
                 type="password"

@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useQuality } from "../../../hooks/useQuality";
+import { useQualities } from "../../../hooks/useQualities";
 const Quality = ({ id }) => {
-    const { isLoading, getQuality } = useQuality();
+    const { isLoading, getQuality } = useQualities();
     const qual = getQuality(id);
     if (!isLoading) {
         return (

@@ -6,8 +6,8 @@ import Main from "./layouts/main";
 import NavBar from "./components/ui/navBar";
 import Users from "./layouts/users";
 import { ToastContainer } from "react-toastify";
-import { ProfessionProvider } from "./hooks/useProfession";
-import { QualityProvider } from "./hooks/useQuality";
+import { ProfessionProvider } from "./hooks/useProfessions";
+import { QualityProvider } from "./hooks/useQualities";
 
 function App() {
     return (

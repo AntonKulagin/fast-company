@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 const QualityContext = React.createContext();
 
-export const useQuality = () => {
+export const useQualities = () => {
     return useContext(QualityContext);
 };
 

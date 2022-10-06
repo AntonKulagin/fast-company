@@ -35,7 +35,6 @@ export function validator(data, config) {
             default:
                 break;
         }
-        if (statusValidate) console.log(config.message);
         if (statusValidate) return config.message;
     }
     for (const fieldName in data) {

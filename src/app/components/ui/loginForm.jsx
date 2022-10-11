@@ -9,23 +9,21 @@ const LoginForm = () => {
     const history = useHistory();
     const [data, setData] = useState({ email: "", password: "", stayOn: false });
     const [errors, setErrors] = useState({});
+    const [enterError, setEnterError] = useState(null);
 
     const { logIn } = useAuth();
 
     const handleChange = (target) => {
         setData((prev) => ({ ...prev, [target.name]: target.value }));
+        setEnterError(null);
     };
 
     const validatorConfig = {
         email: {
-            isRequired: { message: "Электронная почта обязательна для заполнения" },
-            isEmail: { message: "Email введен некорректно" }
+            isRequired: { message: "Электронная почта обязательна для заполнения" }
         },
         password: {
-            isRequired: { message: "Пароль обязателен для заполнения" },
-            isCapitalSymbol: { message: "Пароль должен содержать хотя бы одну заглавную букву" },
-            isContainDigit: { message: "Пароль должен содержать хотябы одну цифру" },
-            min: { message: "Пароль должен состоять минимум из 8 символов", value: 8 }
+            isRequired: { message: "Пароль обязателен для заполнения" }
         }
     };
 
@@ -48,12 +46,12 @@ const LoginForm = () => {
             await logIn(data);
             history.push("/");
         } catch (error) {
-            setErrors(error);
+            setEnterError(error.message);
         }
     };
 
     const getClassButton = () => {
-        return "login-button " + (isValid && "login-button__active");
+        return "login-button " + (!enterError && isValid ? "login-button__active" : "");
     };
     return (
         <form className="login" onSubmit={handleSubmit}>
@@ -75,7 +73,8 @@ const LoginForm = () => {
             <CheckBoxField value={data.stayOn} onChange={handleChange} name="stayOn">
                 Остаться в системе
             </CheckBoxField>
-            <button disabled={!isValid} className={getClassButton()}>
+            {enterError && <p style={{ color: "red" }}>{enterError}</p>}
+            <button disabled={!isValid || enterError} className={getClassButton()}>
                 Отправить
             </button>
         </form>

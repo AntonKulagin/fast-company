@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
 import GroupList from "../../common/groupList";
-import api from "../../../api";
 import SearchStatus from "../../ui/searchStatus";
 import UserTable from "../../ui/userTable";
 import _ from "lodash";
@@ -13,10 +12,12 @@ import Loading from "../../loading";
 import { motion } from "framer-motion";
 import TextField from "../../common/form/textField";
 import { useUser } from "../../../hooks/useUsers";
+import { useProfessions } from "../../../hooks/useProfessions";
+import { useAuth } from "../../../hooks/useAuth";
 
 const UsersListPage = () => {
+    const { isLoading: professionsLoading, professions } = useProfessions();
     const [currentPage, setCurrentPage] = useState(1);
-    const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const [searchUsersByName, setSearchUsersByName] = useState("");
@@ -24,6 +25,7 @@ const UsersListPage = () => {
     const pageSize = 8;
 
     const { users } = useUser();
+    const { currentUser } = useAuth();
 
     const handleDelete = (userId) => {
         //   setUsers(users.filter((user) => user._id !== userId));
@@ -39,10 +41,6 @@ const UsersListPage = () => {
         //   setUsers(newArray);
         console.log(newArray);
     };
-
-    useEffect(() => {
-        api.professions.fetchAll().then((data) => setProfessions(data));
-    }, []);
 
     useEffect(() => {
         setCurrentPage(1);
@@ -66,18 +64,29 @@ const UsersListPage = () => {
     };
 
     if (users) {
-        const searchedUsersByName = searchUsersByName
-            ? users.filter((user) => user.name.toLowerCase().includes(searchUsersByName.toLowerCase()))
-            : users;
+        //   const searchedUsersByName = searchUsersByName
+        //       ? users.filter((user) => user.name.toLowerCase().includes(searchUsersByName.toLowerCase()))
+        //       : users;
 
-        const filteredUsers = selectedProf
-            ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
-            : users;
+        //   const filteredUsers = selectedProf
+        //       ? users.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
+        //       : users;
 
-        const usersFilterList = searchUsersByName ? searchedUsersByName : filteredUsers;
+        //   const usersFilterList = searchUsersByName ? searchedUsersByName : filteredUsers;
 
-        const count = usersFilterList.length;
-        const sortedUsers = _.orderBy(usersFilterList, [sortBy.path], [sortBy.order]);
+        function filterUsers(data) {
+            const filteredUsers = searchUsersByName
+                ? data.filter((user) => user.name.toLowerCase().indexOf(searchUsersByName.toLowerCase()) !== -1)
+                : selectedProf
+                ? data.filter((user) => JSON.stringify(user.profession) === JSON.stringify(selectedProf))
+                : data;
+            return filteredUsers.filter((u) => u._id !== currentUser._id);
+        }
+
+        const filteredUsers = filterUsers(users);
+
+        const count = filteredUsers.length;
+        const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
         const usersCrop = paginate(sortedUsers, currentPage, pageSize);
 
         const clearFilter = () => {
@@ -89,7 +98,7 @@ const UsersListPage = () => {
                 <div className="users">
                     <SearchStatus length={count} />
                     <div className="users__content">
-                        {professions && (
+                        {professions && !professionsLoading && (
                             <motion.div
                                 className="users__professions"
                                 initial={{ x: -50, opacity: 0 }}

@@ -1,35 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useAuth } from "../../hooks/useAuth";
 
 const UserCard = ({ user }) => {
     const history = useHistory();
-    const [urlAvatar, setUrlAvatar] = useState();
-
-    const getUrlAvatar = () => {
-        return `https://avatars.dicebear.com/api/avataaars/${(Math.random() + 1).toString(36).substring(2, 7)}.svg`;
-    };
-
-    useEffect(() => {
-        setUrlAvatar(getUrlAvatar());
-    }, []);
-
+    const { currentUser } = useAuth();
     const handleClick = () => {
         history.push(history.location.pathname + "/edit");
     };
     return (
         <div className="card mb-3">
             <div className="card-body">
-                <button className="position-absolute top-0 end-0 btn btn-light btn-sm" onClick={handleClick}>
-                    <i className="bi bi-gear"></i>
-                </button>
+                {currentUser._id === user._id && (
+                    <button className="position-absolute top-0 end-0 btn btn-light btn-sm" onClick={handleClick}>
+                        <i className="bi bi-gear"></i>
+                    </button>
+                )}
                 <div className="d-flex flex-column align-items-center text-center position-relative">
-                    {urlAvatar && (
-                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}>
-                            <img src={urlAvatar} alt="avatar" className="rounded-circle" width="150" />
-                        </motion.div>
-                    )}
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}>
+                        <img src={user.image} alt="avatar" className="rounded-circle" width="150" />
+                    </motion.div>
                     <div className="mt-3">
                         <h4>{user.name}</h4>
                         <p className="text-secondary mb-1">{user.profession.name}</p>

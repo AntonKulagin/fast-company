@@ -33,12 +33,20 @@ const UserProvider = ({ children }) => {
         }
     }
 
+    function getUserById(userId) {
+        return users.find((u) => u._id === userId);
+    }
+
     function errorCatcher(error) {
         const { message } = error.responce.data;
         setError(message);
     }
 
-    return <UserContext.Provider value={{ users }}>{!isLoading ? children : <Loading />}</UserContext.Provider>;
+    return (
+        <UserContext.Provider value={{ users, getUserById }}>
+            {!isLoading ? children : <Loading />}
+        </UserContext.Provider>
+    );
 };
 UserProvider.propTypes = {
     children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node])

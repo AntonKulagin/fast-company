@@ -44,7 +44,9 @@ const LoginForm = () => {
         if (!isValid) return;
         try {
             await logIn(data);
-            history.push("/");
+
+            console.log(history);
+            history.push(history.location.state ? history.location.state.from.pathname : "/");
         } catch (error) {
             setEnterError(error.message);
         }

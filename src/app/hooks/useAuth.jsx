@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import userService from "../services/user.service";
 import { toast } from "react-toastify";
-import localStorageService, { getUserId, setTokens } from "../services/localStorage.service";
+import localStorageService, { setTokens } from "../services/localStorage.service";
 import Loading from "../components/loading";
 import { useHistory } from "react-router-dom";
 
@@ -60,28 +60,9 @@ const AuthProvider = ({ children }) => {
         }
     }
 
-    async function update({ name, ...rest }) {
-        try {
-            const { data } = await httpAuth.post(`accounts:update`, {
-                idToken: getUserId(),
-                displayName: name,
-                returnSecureToken: true
-            });
-            console.log(data);
-            setTokens(data);
-            await updateUser({
-                name: data.displayName,
-                ...rest
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     async function updateUser(data) {
         try {
             const { content } = await userService.update(data);
-            console.log("update", content);
             setUser(content);
         } catch (error) {
             errorCatcher(error);
@@ -109,7 +90,6 @@ const AuthProvider = ({ children }) => {
             await getUserData();
         } catch (error) {
             const { code, message } = error.response.data.error;
-            console.log(error);
             if (code === 400) {
                 if (message === "INVALID_PASSWORD" || message === "EMAIL_NOT_FOUND" || message === "INVALID_EMAIL") {
                     throw new Error("Неправильный логин или пароль");
@@ -159,7 +139,7 @@ const AuthProvider = ({ children }) => {
         setError(message);
     }
     return (
-        <AuthContext.Provider value={{ signUp, logIn, logOut, update, currentUser }}>
+        <AuthContext.Provider value={{ signUp, logIn, logOut, updateUser, currentUser }}>
             {!isLoading ? children : <Loading />}
         </AuthContext.Provider>
     );

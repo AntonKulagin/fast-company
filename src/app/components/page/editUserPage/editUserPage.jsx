@@ -12,37 +12,34 @@ import { useQualities } from "../../../hooks/useQualities";
 
 const EditUserPage = () => {
     const history = useHistory();
-    const { currentUser, update } = useAuth();
+    const { currentUser, updateUser } = useAuth();
     const { professions } = useProfessions();
     const { qualities, getQuality } = useQualities();
     const [isLoading, setIsLoading] = useState(true);
 
-    const transformProfessions = Object.keys(professions).map((professionName) => ({
-        label: professions[professionName].name,
-        value: professions[professionName]._id
+    const professionsList = professions.map((p) => ({
+        label: p.name,
+        value: p._id
     }));
 
-    const transformQualities = Object.keys(qualities).map((optionName) => ({
-        value: qualities[optionName]._id,
-        label: qualities[optionName].name,
-        color: qualities[optionName].color
+    const qualitiesList = qualities.map((q) => ({
+        label: q.name,
+        value: q._id
     }));
 
-    const userQualities = currentUser.qualities.reduce((acc, qual) => [...acc, getQuality(qual)], []);
+    const userQualities = currentUser.qualities.map((qualId) => getQuality(qualId));
 
-    const transformUserQualities = userQualities.map((qual) => ({
-        value: qual._id,
-        label: qual.name,
-        color: qual.color
+    const userQualitiesList = userQualities.map((q) => ({
+        label: q.name,
+        value: q._id
     }));
 
     const transformUser = {
         ...currentUser,
-        qualities: transformUserQualities
+        qualities: userQualitiesList
     };
 
     const [data, setData] = useState(transformUser);
-
     const [errors, setErrors] = useState({});
 
     const getQualities = (elements) => {
@@ -56,11 +53,12 @@ const EditUserPage = () => {
         if (!isValid) return;
         const updatedUser = {
             ...data,
-            qualities: getQualities(qualities)
+            qualities: getQualities(data.qualities)
         };
+
         try {
-            await update(updatedUser);
-            console.log(updatedUser);
+            await updateUser(updatedUser);
+            // console.log(updatedUser);
             history.push(`/users/${data._id}`);
         } catch (error) {
             console.log(error);
@@ -127,10 +125,10 @@ const EditUserPage = () => {
                             <SelectField
                                 label="Выбери свою профессию"
                                 defaultOption="Choose..."
-                                options={transformProfessions}
+                                options={professionsList}
                                 name="profession"
                                 onChange={handleChange}
-                                value={data.profession.label}
+                                value={data.profession}
                                 error={errors.profession}
                             />
                             <RadioField
@@ -146,7 +144,7 @@ const EditUserPage = () => {
                             />
                             <MultiSelectField
                                 defaultValue={data.qualities}
-                                options={transformQualities}
+                                options={qualitiesList}
                                 onChange={handleChange}
                                 name="qualities"
                                 label="Выберите ваши качества"

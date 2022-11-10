@@ -13,8 +13,8 @@ import { useQualities } from "../../../hooks/useQualities";
 const EditUserPage = () => {
     const history = useHistory();
     const { currentUser, updateUser } = useAuth();
-    const { professions } = useProfessions();
-    const { qualities, getQuality } = useQualities();
+    const { professions, isLoading: professionsIsLoading } = useProfessions();
+    const { qualities, getQuality, isLoading: qualitiesIsLoading } = useQualities();
     const [isLoading, setIsLoading] = useState(true);
 
     const professionsList = professions.map((p) => ({
@@ -58,7 +58,6 @@ const EditUserPage = () => {
 
         try {
             await updateUser(updatedUser);
-            // console.log(updatedUser);
             history.push(`/users/${data._id}`);
         } catch (error) {
             console.log(error);
@@ -66,7 +65,15 @@ const EditUserPage = () => {
     };
 
     useEffect(() => {
-        if (data._id) setIsLoading(false);
+        if (!professionsIsLoading && !qualitiesIsLoading && currentUser && data && isLoading) {
+            setData(transformUser);
+        }
+    }, [professionsIsLoading, qualitiesIsLoading, currentUser, data]);
+
+    useEffect(() => {
+        if (data && isLoading) {
+            setIsLoading(false);
+        }
     }, [data]);
 
     const validatorConfig = {

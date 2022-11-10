@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Qualities from "./qualities";
 
-const QualitiesCard = ({ qualities }) => {
+const QualitiesCard = ({ data }) => {
     return (
         <div className="card mb-3">
             <div className="card-body d-flex flex-column justify-content-center text-center">
@@ -9,18 +10,14 @@ const QualitiesCard = ({ qualities }) => {
                     <span>Qualities</span>
                 </h5>
                 <p className="card-text">
-                    {qualities.map((qual) => (
-                        <span className={"badge mx-1 bg-" + qual.color} key={qual._id}>
-                            {qual.name}
-                        </span>
-                    ))}
+                    <Qualities qualities={data} />
                 </p>
             </div>
         </div>
     );
 };
 QualitiesCard.propTypes = {
-    qualities: PropTypes.array
+    data: PropTypes.array
 };
 
 export default QualitiesCard;
